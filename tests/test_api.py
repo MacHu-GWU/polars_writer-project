@@ -6,6 +6,9 @@ from polars_writer import api
 def test():
     _ = api
     _ = api.Writer
+    _ = api.Writer.to_method_and_kwargs
+    _ = api.Writer.to_kwargs
+    _ = api.Writer.write
 
 
 if __name__ == "__main__":

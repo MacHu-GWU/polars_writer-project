@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+import io
+import polars as pl
 from polars_writer.writer import Writer
 
 
@@ -13,11 +15,33 @@ class TestWriter:
         with pytest.raises(ValueError):
             writer = Writer(format="delta", delta_mode="invalid")
 
-        Writer(format="csv").to_kwargs()
-        Writer(format="json").to_kwargs()
-        Writer(format="ndjson").to_kwargs()
-        Writer(format="parquet").to_kwargs()
-        Writer(format="delta").to_kwargs()
+        df = pl.DataFrame({"id": [1, 2, 3], "name": ["alice", "bob", "cathy"]})
+
+        buffer = io.BytesIO()
+        writer = Writer(format="csv")
+        writer.write(df, file_args=[buffer])
+        df1 = pl.read_csv(buffer.getvalue())
+        assert df1.to_dicts() == df.to_dicts()
+
+        buffer = io.BytesIO()
+        writer = Writer(format="json")
+        writer.write(df, file_args=[buffer])
+        df1 = pl.read_json(buffer.getvalue())
+        assert df1.to_dicts() == df.to_dicts()
+
+        buffer = io.BytesIO()
+        writer = Writer(format="ndjson")
+        writer.write(df, file_args=[buffer])
+        df1 = pl.read_ndjson(buffer.getvalue())
+        assert df1.to_dicts() == df.to_dicts()
+
+        buffer = io.BytesIO()
+        writer = Writer(format="parquet")
+        writer.write(df, file_args=[buffer])
+        df1 = pl.read_parquet(buffer.getvalue())
+        assert df1.to_dicts() == df.to_dicts()
+
+        Writer(format="parquet").to_method_and_kwargs()
 
 
 if __name__ == "__main__":

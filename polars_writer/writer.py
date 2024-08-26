@@ -6,6 +6,9 @@ import dataclasses
 
 from func_args import NOTHING, resolve_kwargs
 
+if T.TYPE_CHECKING:  # pragma: no cover
+    import polars as pl
+
 
 class FormatEnum(str, enum.Enum):
     csv = "csv"
@@ -13,6 +16,14 @@ class FormatEnum(str, enum.Enum):
     ndjson = "ndjson"
     parquet = "parquet"
     delta = "delta"
+
+
+class WriteMethodEnum(str, enum.Enum):
+    write_csv = "write_csv"
+    write_json = "write_json"
+    write_ndjson = "write_ndjson"
+    write_parquet = "write_parquet"
+    write_delta = "write_delta"
 
 
 class ParquetCompressionEnum(str, enum.Enum):
@@ -94,9 +105,9 @@ class Writer:
     def is_delta(self) -> bool:
         return self.format == FormatEnum.delta.value
 
-    def to_kwargs(self) -> T.Dict[str, T.Any]:
+    def to_method_and_kwargs(self) -> T.Tuple[str, T.Dict[str, T.Any]]:
         if self.is_csv():
-            return resolve_kwargs(
+            return WriteMethodEnum.write_csv.value, resolve_kwargs(
                 include_header=self.csv_include_header,
                 separator=self.csv_delimiter,
                 line_terminator=self.csv_line_terminator,
@@ -108,15 +119,17 @@ class Writer:
                 null_value=self.csv_null_value,
                 quote_style=self.csv_quote_style,
             )
-        elif self.is_json() or self.is_ndjson():
-            return dict()
+        elif self.is_json():
+            return WriteMethodEnum.write_json.value, dict()
+        elif self.is_ndjson():
+            return WriteMethodEnum.write_ndjson.value, dict()
         elif self.is_parquet():
-            return resolve_kwargs(
+            return WriteMethodEnum.write_parquet, resolve_kwargs(
                 compression=self.parquet_compression,
                 compression_level=self.parquet_compression_level,
             )
         elif self.is_delta():
-            return resolve_kwargs(
+            return WriteMethodEnum.write_delta, resolve_kwargs(
                 mode=self.delta_mode,
                 overwrite_schema=self.delta_overwrite_schema,
                 delta_write_options=self.delta_write_options,
@@ -124,3 +137,16 @@ class Writer:
             )
         else:  # pragma: no cover
             raise NotImplementedError
+
+    def to_kwargs(self) -> T.Dict[str, T.Any]:
+        method, kwargs = self.to_method_and_kwargs()
+        return kwargs
+
+    def write(
+        self,
+        df: "pl.DataFrame",
+        file_args: T.List[T.Any],
+    ):
+        method, kwargs = self.to_method_and_kwargs()
+        write_method = getattr(df, method)
+        return write_method(*file_args, **kwargs)
