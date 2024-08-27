@@ -1,6 +1,7 @@
 # User Settings
 polars_writer.egg-info/
 tmp/
+tmp*
 
 
 # Byte-compiled / optimized / DLL files
