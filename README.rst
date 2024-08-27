@@ -55,6 +55,8 @@ Welcome to ``polars_writer`` Documentation
 
 ``polars_writer`` is a library that allows defining methods like polars.DataFrame.write_csv and polars.DataFrame.write_json using a pure JSON-friendly parameter format. The purpose of this library is to provide an interface independent of the Python language itself, allowing users to directly define the behavior of polars writers using JSON. This library is intended to be used in some end-user facing data products.
 
+See `Usage example <https://github.com/MacHu-GWU/polars_writer-project/blob/main/tests/test_writer.py>`_
+
 
 .. _install:
 

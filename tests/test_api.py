@@ -9,6 +9,12 @@ def test():
     _ = api.Writer.to_method_and_kwargs
     _ = api.Writer.to_kwargs
     _ = api.Writer.write
+    _ = api.Writer.to_read_method_and_kwargs
+    _ = api.Writer.to_read_kwargs
+    _ = api.Writer.read
+    _ = api.Writer.to_scan_method_and_kwargs
+    _ = api.Writer.to_scan_kwargs
+    _ = api.Writer.scan
 
 
 if __name__ == "__main__":
