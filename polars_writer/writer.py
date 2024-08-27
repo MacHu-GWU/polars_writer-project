@@ -1,5 +1,20 @@
 # -*- coding: utf-8 -*-
 
+"""
+Polars DataFrame Writer Module
+
+This module provides functionality for writing Polars DataFrames to various file formats.
+It includes a Writer class and several enums to support different output formats and options.
+
+Classes:
+
+- :class:`FormatEnum`
+- :class:`WriteMethodEnum`
+- :class:`ParquetCompressionEnum`
+- :class:`DeltaModeEnum`
+- :class:`Writer`: Main class for configuring and executing write operations.
+"""
+
 import typing as T
 import enum
 import dataclasses
