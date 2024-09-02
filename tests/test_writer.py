@@ -31,6 +31,10 @@ class TestWriter:
         assert "delta_write_options" not in kwargs
         assert "delta_merge_options" not in kwargs
 
+        dct = writer.to_dict()
+        assert "storage_options" not in dct
+        assert writer == Writer.from_dict(dct)
+
     def test_write(self):
         df = pl.DataFrame({"id": [1, 2, 3], "name": ["alice", "bob", "cathy"]})
 

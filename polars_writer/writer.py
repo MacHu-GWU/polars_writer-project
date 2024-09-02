@@ -161,6 +161,39 @@ class Writer:
             except KeyError:
                 raise ValueError(f"Invalid delta_mode: {self.delta_mode}")
 
+    @classmethod
+    def from_dict(cls, dct: T.Dict[str, T.Any]):
+        return cls(**dct)
+
+    def to_dict(self) -> T.Dict[str, T.Any]:
+        return resolve_kwargs(
+            format=self.format,
+            storage_options=self.storage_options,
+            csv_include_header=self.csv_include_header,
+            csv_delimiter=self.csv_delimiter,
+            csv_line_terminator=self.csv_line_terminator,
+            csv_quote_char=self.csv_quote_char,
+            csv_datetime_format=self.csv_datetime_format,
+            csv_date_format=self.csv_date_format,
+            csv_float_scientific=self.csv_float_scientific,
+            csv_float_precision=self.csv_float_precision,
+            csv_null_value=self.csv_null_value,
+            csv_quote_style=self.csv_quote_style,
+            parquet_compression=self.parquet_compression,
+            parquet_compression_level=self.parquet_compression_level,
+            parquet_statistics=self.parquet_statistics,
+            parquet_row_group_size=self.parquet_row_group_size,
+            parquet_data_page_size=self.parquet_data_page_size,
+            parquet_use_pyarrow=self.parquet_use_pyarrow,
+            parquet_pyarrow_options=self.parquet_pyarrow_options,
+            parquet_partition_by=self.parquet_partition_by,
+            parquet_partition_chunk_size_bytes=self.parquet_partition_chunk_size_bytes,
+            delta_mode=self.delta_mode,
+            delta_overwrite_schema=self.delta_overwrite_schema,
+            delta_write_options=self.delta_write_options,
+            delta_merge_options=self.delta_merge_options,
+        )
+
     def is_csv(self) -> bool:
         return self.format == FormatEnum.csv.value
 
