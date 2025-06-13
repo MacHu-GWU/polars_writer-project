@@ -19,6 +19,7 @@ import typing as T
 import enum
 import dataclasses
 
+import polars
 import polars as pl
 from func_args import NOTHING, resolve_kwargs
 

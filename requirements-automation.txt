@@ -1,1 +1,2 @@
-# This requirements file should only include dependencies for automation, shell scripts, cli, etc ...
+func-args==1.0.1 ; python_version >= "3.9" and python_version < "4.0"
+polars==1.30.0 ; python_version >= "3.9" and python_version < "4.0"
